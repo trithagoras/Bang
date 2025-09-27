@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Bang
+      dockerfile: Dockerfile
+    container_name: bang-backend
+    networks:
+      - bang-net
+
+  nginx:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: bang-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - bang-net
+
+networks:
+  bang-net:
