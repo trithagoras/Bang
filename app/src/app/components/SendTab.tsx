@@ -4,6 +4,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+const copyToClipboard = (code: string | null) => {
+    if (!code) return;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code)
+        .then(() => toast.success("Copied code"))
+        .catch(() => toast.error("Failed to copy"));
+    } else {
+        // fallback for HTTP / older browsers
+        const textarea = document.createElement("textarea");
+        textarea.value = code;
+        textarea.style.position = "fixed"; // prevent scroll jump
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+        const successful = document.execCommand("copy");
+        if (successful) {
+            toast.success("Copied code");
+        } else {
+            toast.error("Failed to copy");
+        }
+        } catch (err) {
+        toast.error("Failed to copy");
+        }
+
+        document.body.removeChild(textarea);
+    }
+}
+
 const SendTab = () => {
   const [message, setMessage] = useState("");
   const [code, setCode] = useState<string | null>(null);
@@ -17,14 +49,6 @@ const SendTab = () => {
     });
     const data = await res.json();
     setCode(data.code);
-  };
-
-  const copyCode = () => {
-    if (!code) {
-      return;
-    }
-    navigator.clipboard.writeText(code);
-    toast.success("Copied code");
   };
 
   return (
@@ -50,7 +74,7 @@ const SendTab = () => {
           <div className="flex justify-center items-center gap-3">
             <span className="text-2xl font-mono tracking-widest">{code}</span>
             <button
-              onClick={copyCode}
+              onClick={() => copyToClipboard(code)}
               className="text-gray-600 hover:text-gray-900"
             >
               <FontAwesomeIcon icon={faCopy} />
