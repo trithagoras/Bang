@@ -7,7 +7,7 @@ public class MessageService(ICodeService codeService) : IMessageService {
     private readonly TimeSpan expiryTime = TimeSpan.FromMinutes(10);
 
     public async Task<string> SendMessageAsync(string message, CancellationToken ct = default) {
-        var code = await codeService.GenerateCode();
+        var code = await GenerateUniqueCode();
         store[code] = (message, DateTime.UtcNow);
 
         _ = new Timer(state => {
@@ -29,5 +29,21 @@ public class MessageService(ICodeService codeService) : IMessageService {
         }
 
         throw new KeyNotFoundException("Code not found or expired.");
+    }
+
+    private async Task<string> GenerateUniqueCode() {
+        var maxAttempts = 100;
+        var attempts = 0;
+
+        while (attempts < maxAttempts) {
+            var code = await codeService.GenerateCode();
+            if (store.ContainsKey(code)) {
+                attempts++;
+                continue;
+            }
+            return code;
+        }
+
+        throw new InvalidOperationException("A unique code could not be generated at this time. Please try again later.");
     }
 }
