@@ -1,7 +1,8 @@
 "use client"
-import { faKey } from "@fortawesome/free-solid-svg-icons";
+import { faCopy, faKey } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import copyToClipboard from "../framework/copyToClipboard";
 
 const RetrieveTab = () => {
     const [inputCode, setInputCode] = useState("");
@@ -34,12 +35,22 @@ const RetrieveTab = () => {
         </button>
 
         {retrievedMessage !== null && (
-            <textarea
-            className="w-full p-3 border rounded-xl bg-gray-50 min-h-[150px]"
-            readOnly
-            value={retrievedMessage}
-            />
-        )}
+            <div className="flex">
+                <textarea
+                    className="w-full p-3 border rounded-xl bg-gray-50 min-h-[150px]"
+                    readOnly
+                    value={retrievedMessage}
+                />
+                <span>
+                    <button
+                        className="ml-2 bg-yellow-300 p-3 rounded-2xl text-black hover:bg-yellow-400 border-yellow-500"
+                        onClick={() => copyToClipboard(retrievedMessage)}
+                    >
+                        <FontAwesomeIcon icon={faCopy} />
+                    </button>
+                </span>
+            </div>
+         )}
         </div>
     );
 };
