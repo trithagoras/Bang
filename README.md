@@ -8,7 +8,10 @@ Bang! was born out of a desire to share a simple JSON configuration between my w
 
 * Go to the site
 * Paste the text you wish to share into the input text area and click 'Send'
-* A 6-digit code will be generated for you
-* Return to the site and enter the 6-digit code to reveal the text
+* A 5-lettered word code will be generated for you
+* Return to the site and enter the code to reveal the text
 
 Upon using the code and revealing the text, the text will be deleted. Texts also automatically delete after a 10 minute timeout.
+
+![](res/img/before.png)
+![](res/img/after.png)

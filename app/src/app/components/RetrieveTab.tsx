@@ -22,7 +22,7 @@ const RetrieveTab = () => {
             className="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest font-mono text-lg"
             placeholder="Enter 5-digit code"
             value={inputCode}
-            onChange={(e) => setInputCode(e.target.value)}
+            onChange={(e) => setInputCode(e.target.value.toLocaleUpperCase())}
         />
         <button
             onClick={handleRetrieve}
